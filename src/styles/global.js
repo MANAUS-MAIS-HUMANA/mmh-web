@@ -8,7 +8,6 @@ export default createGlobalStyle`
     padding: 0;
     outline: 0;
     box-sizing: border-box;
-    scroll-behavior: smooth;
   }
 
   *:focus {
@@ -26,10 +25,12 @@ export default createGlobalStyle`
   }
 
   body {
+    font: 14px 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
+    background: #FFFFFF;
   }
 
-  body, input, button {
+  textarea, body, input, button {
     font: 14px 'Montserrat', sans-serif;
   }
 
@@ -46,4 +47,7 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
+  .input {
+    width: 100%;
+  }
 `;

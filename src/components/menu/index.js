@@ -9,11 +9,27 @@ import settings_icon from '../../assets/settings_icon.svg'
 import info_icon from '../../assets/info_icon.svg'
 import exit_icon from '../../assets/exit_icon.svg'
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import MenuToolTip from './tooltip'
 
+import {logout} from '../../services/auth'
+import api from "../../services/api";
+
 const Menu = () => {
+ 
+  const history = useHistory();
+
+  async function handleLogout (e) {
+    try { 
+      const response = await api.post("/auth/logout");
+      logout();
+      history.push("/");
+    } catch (err) {
+      console.log(err);
+    }
+  
+  };
 
   const menu_icons = [
     {
@@ -68,7 +84,7 @@ const Menu = () => {
           to={'/'}
           key={'Sair'}
         >
-          <MenuToolTip title={'Sair'} placement='right-start'>
+          <MenuToolTip onClick={handleLogout} title={'Sair'} placement='right-start'>
             <div>
               <img src={exit_icon} alt='Sair' />
             </div>
