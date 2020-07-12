@@ -1,0 +1,14 @@
+dist: trusty
+
+branches:
+  only:
+    - master
+
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build --build-arg REACT_APP_BACKEND_URL=https://cluster1.manausmaishumana.com.br --build-arg NODE_ENV=production -t manausmaishumana/front -f .infra/Dockerfile .
+      - docker images
+      - docker push $DOCKER_USERNAME/front:latest
