@@ -1,16 +1,13 @@
 import { createGlobalStyle } from 'styled-components';
 
-
 // Reset CSS básico
 export default createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,700&display=swap');
 
   * {
     margin: 0;
     padding: 0;
     outline: 0;
     box-sizing: border-box;
-    scroll-behavior: smooth;
   }
 
   *:focus {
@@ -21,13 +18,22 @@ export default createGlobalStyle`
     height: 100%;
   }
 
-  body {
-    -webkit-font-smoothing: antialiased;
+  
+  html {
+    /*font-size: 62.5%; */ /* Para facilitar a conversão px -> rem */ 
+    font-size: ${props => props.rate}%; /* Outra forma de fazer a resposividade para desktops */
   }
 
-  body, input, button {
+  body {
     font: 14px 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #FFFFFF;
   }
+
+  textarea, body, input, button, select {
+    font: 14px 'Montserrat', sans-serif;
+  }
+
 
   a {
     text-decoration: none;
@@ -41,4 +47,7 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
+  .input {
+    width: 100%;
+  }
 `;
