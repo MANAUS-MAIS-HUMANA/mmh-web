@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from '@rocketseat/unform'
 import Layout from '../../components/layout'
 import { Container, Header, Line, Footer } from './styles';
@@ -10,10 +10,13 @@ import FormCheck from '../../components/Check'
 import Loading from '../../components/Loading'
 import api from '../../services/api'
 import { toast } from 'react-toastify'
+import to from 'await-to-js'
 
 const Profile = () => {
-
 	// Variáveis de estado da página
+
+	const perfis = localStorage.getItem('@mmh/perfis')
+	const showParceiro = perfis && !perfis.includes('parceiro')
 
 	const [married, setMarried] = useState(false)
 	const [employed, setEmployed] = useState(true)
@@ -21,7 +24,30 @@ const Profile = () => {
 	const [activities, setActivities] = useState(true)
 	const [typeActivities, setTypeActivities] = useState(['Online', 'Presencial'])
 	const [pageLoading, setPageLoading] = useState(false)
-	const parceiro_id = localStorage.getItem('@mmh/partner_id')
+	const [partners, setPartners] = useState([])
+
+	// Obtendo a lista de parceiros, caso o usuário logado não seja uma instituição parceira
+
+	useEffect(() => {
+		async function getParceiros() {
+			if (!showParceiro) {
+				setPartners([]);
+				return;
+			}
+
+		    const [ error, response ] = await to(api.get('/parceiros'));
+
+		    if (error) {
+		        return [];
+		    }
+
+		    setPartners(response.data.data.map(partner => {
+				return { id: partner.id.toString(), title: partner.nome };
+			}));
+		}
+
+		getParceiros();
+	}, [showParceiro])
 
 	// Lista de bairros
 
@@ -138,7 +164,7 @@ const Profile = () => {
 		{ id: '6', title: 'Viúvo(a)' }
 	]
 
-	// Situacões de moradia 
+	// Situacões de moradia
 
 	const houseStatus = [
 		{ id: '1', title: 'Própria' },
@@ -156,6 +182,7 @@ const Profile = () => {
 
 	// Schema de validacão dos dados
 	const schema = Yup.object().shape({
+		partner_id: Yup.string().default(''),
 		name: Yup.string().required('O nome é obrigatório'),
 		email: Yup.string()
 			.email('Insira um e-mail válido')
@@ -197,7 +224,6 @@ const Profile = () => {
 		income: Yup.string(),
 	});
 
-	
 	// Máscara para campos com formatos específicos
 	function mask(i, type) {
 		var v = i.value;
@@ -241,11 +267,16 @@ const Profile = () => {
 
 	// Funcão de submit do form e criacão do objeto de body para a requisicão.
 	function handleSubmit(data) {
+		const {
+			partner_id, income, job, house_status, coliving, neighborhood, compl, house_number,
+			cep, address, partner_cpf, partner_name, marial, birth, mobile, cpf, email, name,
+		} = data
 
-		const {income, job, house_status, coliving, neighborhood, compl, house_number, cep, address, partner_cpf, partner_name, marial, birth, mobile, cpf, email, name} = data
+		const localStoragePartnerId = localStorage.getItem('@mmh/partner_id')
+		const partnerId = (partner_id === '') ? localStoragePartnerId : partner_id
 
 		const body = {
-			parceiro_id: parceiro_id || 1, // Atencão. Estou colocando essa condicão apenas para podermos testar o cadastro mesmo fazendo login via MMH
+			parceiro_id: parseInt(partnerId),
 			nome: name,
 			cpf,
 			email,
@@ -304,7 +335,7 @@ const Profile = () => {
 
 			toast.error(`Erro ao cadastrar o beneficiário`)
 			error.response && error.response.data && error.response.data.errors.map(error => toast.error(error))
-			
+
 		}
 
 		setPageLoading(false)
@@ -319,6 +350,14 @@ const Profile = () => {
 					<h2>Cadastro de Beneficiários</h2>
 				</Header>
 				<Form schema={schema} onSubmit={handleSubmit} >
+					<Line>
+					{
+						showParceiro ?
+							<FormSelect label='Parceiro' name='partner_id' options={partners} required/>
+						:
+							<></>
+					}
+					</Line>
 					<Line>
 						<FormInput label='Nome' name='name' placeholder='ex. João Pedro' required />
 						<FormInput label='Email' name='email' placeholder='ex. example@example.com' required />
