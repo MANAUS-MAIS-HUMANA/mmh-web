@@ -35,7 +35,7 @@ const Profile = () => {
 				return;
 			}
 
-		    const [ error, response ] = await to(api.get('/parceiros'));
+		    const [ error, response ] = await to(api.get('/parceiros/basico'));
 
 		    if (error) {
 		        return [];
