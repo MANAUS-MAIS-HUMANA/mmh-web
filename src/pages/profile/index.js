@@ -281,7 +281,7 @@ const Profile = () => {
 			cpf,
 			email,
 			data_nascimento: `${birth.slice(-4)}-${birth.slice(3,5)}-${birth.slice(0,2)}`,
-			trabalho: jobObj[job-1].title,
+			trabalho: job ? jobObj[job-1].title : 'Desempregado',
 			esta_desempregado: !employed,
 			estado_civil_id: marial,
 			nome_conjuge: partner_name || ``,
