@@ -17,11 +17,11 @@ import {logout} from '../../services/auth'
 import api from "../../services/api";
 
 const Menu = () => {
- 
+
   const history = useHistory();
 
   async function handleLogout (e) {
-    try { 
+    try {
       // eslint-disable-next-line
       const response = await api.post("/auth/logout");
       logout();
@@ -29,7 +29,7 @@ const Menu = () => {
     } catch (err) {
       console.log(err);
     }
-  
+
   };
 
   const menu_icons = [
@@ -39,7 +39,7 @@ const Menu = () => {
       icon: home_icon,
     },
     {
-      page: 'Perfil',
+      page: 'Beneficiários',
       to: '/profile',
       icon: profile_icon,
     },

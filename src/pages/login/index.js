@@ -59,12 +59,13 @@ const Login = () => {
     if (!email || !senha) {
       setValues({ ...values, error: "Preencha e-mail e senha para continuar!" });
     } else {
-      try { 
+      try {
         const response = await api.post("/auth/login", { email, senha });
         login(response.data.data.access_token);
 
         if(response.data.data) {
           localStorage.setItem('@mmh/partner_id', response.data.data.parceiro_id)
+          localStorage.setItem('@mmh/perfis', response.data.data.perfis.join(','))
         }
 
         history.push("/dashboard");
