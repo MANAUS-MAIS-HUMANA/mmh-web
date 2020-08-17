@@ -274,6 +274,9 @@ const Profile = () => {
 
 		const localStoragePartnerId = localStorage.getItem('@mmh/partner_id')
 		const partnerId = (partner_id === '') ? localStoragePartnerId : partner_id
+		const complement = compl ? ('. COMPLEMENTO: ' + compl) : '';
+		const fullAddress = 'LOGRADOURO: '+ address + '. NÚMERO: ' + house_number +
+			complement + '. CEP: ' + cep.replace('-','');
 
 		const body = {
 			parceiro_id: parseInt(partnerId),
@@ -301,12 +304,9 @@ const Profile = () => {
 			],
 			enderecos: [
 				{
-					endereco: address,
-					numero: house_number,
-					complemento: compl,
+					endereco: fullAddress,
 					bairro_id: neighborhood,
 					zona_id: null,
-					cep: parseInt(cep.replace('-','')),
 					cidade_id: 1
 				}
 
