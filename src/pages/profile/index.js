@@ -25,10 +25,23 @@ const Profile = () => {
 	const [typeActivities, setTypeActivities] = useState(['Online', 'Presencial'])
 	const [pageLoading, setPageLoading] = useState(false)
 	const [partners, setPartners] = useState([])
+	const [neighborhoods, setNeighborhoods] = useState([])
 
 	// Obtendo a lista de parceiros, caso o usuário logado não seja uma instituição parceira
 
 	useEffect(() => {
+		async function getNeighborhoods() {
+		    const [ error, response ] = await to(api.get('/bairros'));
+
+		    if (error) {
+		        return [];
+		    }
+
+		    setNeighborhoods(response.data.data.map(bairro => {
+				return { id: bairro.id.toString(), title: bairro.nome };
+			}));
+		}
+
 		async function getParceiros() {
 			if (!showParceiro) {
 				setPartners([]);
@@ -47,111 +60,8 @@ const Profile = () => {
 		}
 
 		getParceiros();
+		getNeighborhoods();
 	}, [showParceiro])
-
-	// Lista de bairros
-
-	const neighborhoods = [
-		'Adrianópolis'
-		, 'Águas Claras'
-		, 'Aleixo'
-		, 'Alfredo Nascimento'
-		, 'Alvorada'
-		, 'Alvorada 2'
-		, 'Amadeu Botelho'
-		, 'Aparecida'
-		, 'Armando Mendes'
-		, 'Betânia'
-		, 'Cachoeirinha'
-		, 'Campos Sales'
-		, 'Centro'
-		, 'Chapada'
-		, 'Cidade de Deus'
-		, 'Cidade Nova'
-		, 'Cidade Nova 2'
-		, 'Cidade Nova 3'
-		, 'Cidade Nova 5'
-		, 'Colônia Antônio Aleixo'
-		, 'Colônia Cachoeira Grande'
-		, 'Colônia Oliveira Machado'
-		, 'Colônia Santo Antônio'
-		, 'Colônia Terra Nova'
-		, 'Compensa 1'
-		, 'Compensa 2'
-		, 'Compensa 3'
-		, 'Conjunto João Paulo II'
-		, 'Coroado'
-		, 'Crespo'
-		, 'Da Paz'
-		, 'Distrito Industrial 1'
-		, 'Distrito Industrial 2'
-		, 'Dom Pedro'
-		, 'Educandos'
-		, 'Fazendinha'
-		, 'Flores'
-		, 'Francisca Mendes'
-		, 'Gilberto Mestrinho'
-		, 'Glória'
-		, 'Grande Vitória'
-		, 'Japiim'
-		, 'Jorge Teixeira'
-		, 'Lago Azul'
-		, 'Lírio do Vale'
-		, 'Lírio do Vale 2'
-		, 'Mauazinho'
-		, 'Monte das Oliveiras'
-		, 'Monte Pascoal'
-		, 'Morro da Liberdade'
-		, 'Nossa Senhora Aparecida'
-		, 'Nossa Senhora das Graças'
-		, 'Nova Cidade'
-		, 'Nova Floresta'
-		, 'Nova Vitória'
-		, 'Nova Esperança'
-		, 'Novo Aleixo'
-		, 'Novo Israel'
-		, 'Novo Reino'
-		, 'Parque 10 de Novembro'
-		, 'Parque das Laranjeiras'
-		, 'Parque das Nações'
-		, 'Petrópolis'
-		, 'Planalto'
-		, 'Ponta Negra'
-		, 'Praça 14 de Janeiro'
-		, 'Presidente Vargas'
-		, 'Puraquequara'
-		, 'Raiz'
-		, 'Redenção'
-		, 'Santa Etelvina'
-		, 'Santa Inês'
-		, 'Santa Luzia'
-		, 'Santo Agostinho'
-		, 'Santo Antônio'
-		, 'São Francisco'
-		, 'São Geraldo'
-		, 'São Jorge'
-		, 'São José Operário'
-		, 'São Lázaro'
-		, 'São Raimundo'
-		, 'Tancredo Neves'
-		, 'Tarumã'
-		, 'Tarumã-Açu'
-		, 'Valparaíso'
-		, 'Vila Buriti'
-		, 'Vila da Prata'
-		, 'Zumbi dos Palmares'
-
-	]
-
-	// Objeto de bairros com id numerado automaticamente.
-
-	const neighborhoodsObj = neighborhoods.map(neighborhood => {
-		var obj = {}
-		obj.id = neighborhoods.indexOf(neighborhood) + 1
-		obj.title = neighborhood
-
-		return obj
-	})
 
 	// Obeto com os estados civis possíveis
 
@@ -389,7 +299,12 @@ const Profile = () => {
 					}
 					<Line>
 						<FormInput label='Endereço' name='address' placeholder='Informe seu endereço' required />
-						<FormInput label='CEP' name='cep' placeholder='ex. 69000-000' required onChange={event => mask(event.target, 'cep')} />
+						<FormSelect
+							label='Bairro'
+							name='neighborhood'
+							options={neighborhoods}
+							required
+						/>
 					</Line>
 					<Line>
 						<div className='halfgrid'>
@@ -397,12 +312,7 @@ const Profile = () => {
 							<FormInput label='Complemento' name='compl' placeholder='ex. Próximo ao Shopping' />
 						</div>
 						<div className='halfgrid'>
-							<FormSelect
-								label='Bairro'
-								name='neighborhood'
-								options={neighborhoodsObj}
-								required
-							/>
+							<FormInput label='CEP' name='cep' placeholder='ex. 69000-000' required onChange={event => mask(event.target, 'cep')} />
 							<FormInput label='Nacionalidade' name='nation' placeholder='ex. Brasileiro' required />
 						</div>
 					</Line>
