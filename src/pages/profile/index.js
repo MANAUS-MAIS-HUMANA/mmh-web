@@ -146,7 +146,7 @@ const Profile = () => {
 		coliving: Yup.string(),
 		house_status: Yup.string(),
 		job: employed? Yup.string()
-			.required('Este item ẽ obrigatório'):
+			.required('Este item é obrigatório'):
 			Yup.string(),
 		income: Yup.string(),
 	});
