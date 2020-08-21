@@ -21,7 +21,6 @@ const Profile = () => {
 	const [married, setMarried] = useState(false)
 	const [employed, setEmployed] = useState(true)
 	const [ownBusiness, setOwnBusiness] = useState(true)
-	const [activities, setActivities] = useState(true)
 	const [typeActivities, setTypeActivities] = useState(['Online', 'Presencial'])
 	const [pageLoading, setPageLoading] = useState(false)
 	const [partners, setPartners] = useState([])
@@ -90,6 +89,23 @@ const Profile = () => {
 		{ id: '2', title: 'Autônomo' }
 	]
 
+	// Cursos que o usuário tem interesse
+
+	const courseStatus = [
+		{ id: '1', title: 'Administração' },
+		{ id: '2', title: 'Atendimento ao Cliente' },
+		{ id: '3', title: 'Custos' },
+		{ id: '4', title: 'Finanças' },
+		{ id: '5', title: 'Informática' },
+		{ id: '6', title: 'Não Tenho Interesse' },
+		{ id: '7', title: 'Outro' },
+		{ id: '8', title: 'Planejamento' },
+		{ id: '9', title: 'Plano de Negócio' },
+		{ id: '10', title: 'Preço de venda' },
+		{ id: '11', title: 'Saúde e Beleza' },
+		{ id: '12', title: 'Vendas' },
+	]
+
 	// Schema de validacão dos dados
 	const schema = Yup.object().shape({
 		partner_id: Yup.string().default(''),
@@ -114,6 +130,7 @@ const Profile = () => {
 			.required('O CPF do cônjuge é obrigatório')
 			.min(14, 'Insira o CPF completo') :
 			Yup.string(),
+		course: Yup.string().required('É obrigatório selecionar uma opção de cursos'),
 		address: Yup.string()
 			.required('O endereço é obrigatório'),
 		cep: Yup.string()
@@ -179,7 +196,7 @@ const Profile = () => {
 	function handleSubmit(data) {
 		const {
 			partner_id, income, job, house_status, coliving, neighborhood, compl, house_number,
-			cep, address, partner_cpf, partner_name, marial, birth, mobile, cpf, email, name,
+			cep, address, partner_cpf, partner_name, marial, birth, mobile, cpf, email, name, course
 		} = data
 
 		const localStoragePartnerId = localStorage.getItem('@mmh/partner_id')
@@ -187,6 +204,7 @@ const Profile = () => {
 		const complement = compl ? ('. COMPLEMENTO: ' + compl) : '';
 		const fullAddress = 'LOGRADOURO: '+ address + '. NÚMERO: ' + house_number +
 			complement + '. CEP: ' + cep.replace('-','');
+		const wantParticipateCourses = courseStatus[course - 1].title != 'Não Tenho Interesse'
 
 		const body = {
 			parceiro_id: parseInt(partnerId),
@@ -203,7 +221,8 @@ const Profile = () => {
 			situacao_moradia: houseStatus[house_status-1]?.title || ``,
 			renda_mensal: parseInt(income.replace(/\D/g, '')),
 			gostaria_montar_negocio: ownBusiness,
-			gostaria_participar_cursos: activities,
+			gostaria_participar_cursos: wantParticipateCourses,
+			curso: course,
 			tipo_curso: typeActivities.join(', '),
 			concorda_informacoes_verdadeiras: true,
 			telefones: [
@@ -345,15 +364,17 @@ const Profile = () => {
 							<FormRadio label='Gostaria de montar um negócio?' options={['Sim', 'Não']} required value={ownBusiness} onChange={(status) => setOwnBusiness(status)} />
 						</div>
 						<div className='halfgrid'>
-							<FormRadio label='Tem interesse em participar de cursos, palestras e oficinas?' options={['Sim', 'Não']} required value={activities} onChange={(status) => setActivities(status)} />
-							{
-								activities &&
-								<FormCheck label='Quais tipos de cursos?' options={['Online', 'Presencial']} required value={typeActivities} onChange={(option, value) => {
-									const elements = value.filter(element => element !== option)
-									value.includes(option) ? setTypeActivities([...elements]) : setTypeActivities([...value, option])
-								}} />
+							<FormSelect
+								label='Tem interesse em participar de cursos, palestras e oficinas?'
+								name='course'
+								options={courseStatus}
+								required
+							/>
+							<FormCheck label='Quais tipos de cursos?' options={['Online', 'Presencial']} required value={typeActivities} onChange={(option, value) => {
+								const elements = value.filter(element => element !== option)
+								value.includes(option) ? setTypeActivities([...elements]) : setTypeActivities([...value, option])
+							}} />
 
-							}
 						</div>
 					</Line>
 					<Footer>
