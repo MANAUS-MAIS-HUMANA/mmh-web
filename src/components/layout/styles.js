@@ -1,9 +1,24 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const AuthenticatedContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+`;
+
+export const UnauthenticatedContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 
   @media (max-width: 480px) {
@@ -23,6 +38,14 @@ export const MenuDiv = styled.div`
     width: 100%;
     min-height: 7.6rem;
   }
+`;
+
+export const HeaderDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: #3857A3;
+  flex-direction: column;
 `;
 
 export const PageDiv = styled.div`

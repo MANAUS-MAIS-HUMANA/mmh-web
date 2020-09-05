@@ -22,14 +22,14 @@ export const Container = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 0rem 3rem; 
+    padding: 0rem 3rem;
   }
 
   label {
     font-size: 1.8rem;
     font-weight: 500;
     color: #0D2662;
-    
+
   }
 
   span {
@@ -66,7 +66,7 @@ export const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   min-height: 10rem;
-  padding: 0rem 3rem; 
+  padding: 0rem 3rem;
 
   h2 {
     color: #0D2662;
@@ -106,7 +106,7 @@ export const Footer = styled.div`
   justify-content: center;
   margin-bottom: 5rem;
   margin-top: 3rem;
- 
+
  button {
    display: flex;
    flex-direction: row;
@@ -132,7 +132,7 @@ export const Footer = styled.div`
 
    .MuiCircularProgress-svg {
      color: #ffffff;
-     
+
    }
    &:hover {
      background-color: ${shade(0.2, '#3857A3')};

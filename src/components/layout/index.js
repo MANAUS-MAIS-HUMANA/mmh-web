@@ -1,20 +1,38 @@
 import React from 'react';
 
-import Menu from '../menu'
-import { Container, MenuDiv, PageDiv } from './styles';
+import Menu from '../menu';
+import Header from '../header';
+import {
+  AuthenticatedContainer,
+  UnauthenticatedContainer,
+  MenuDiv,
+  HeaderDiv,
+  PageDiv,
+} from './styles';
 
+import { isAuthenticated } from "../../services/auth";
 
 const layout = (props) => {
 
   return (
-    <Container>
-      <MenuDiv>
-        <Menu />
-      </MenuDiv>
-      <PageDiv>
-        {props.children}
-      </PageDiv>
-    </Container>
+    isAuthenticated() ?
+      <AuthenticatedContainer>
+        <MenuDiv>
+          <Menu />
+        </MenuDiv>
+        <PageDiv>
+          {props.children}
+        </PageDiv>
+      </AuthenticatedContainer>
+    :
+      <UnauthenticatedContainer>
+        <HeaderDiv>
+          <Header />
+        </HeaderDiv>
+        <PageDiv>
+          {props.children}
+        </PageDiv>
+      </UnauthenticatedContainer>
   )
 }
 
