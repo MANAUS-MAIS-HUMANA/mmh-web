@@ -204,7 +204,7 @@ const Profile = () => {
 		const complement = compl ? ('. COMPLEMENTO: ' + compl) : '';
 		const fullAddress = 'LOGRADOURO: '+ address + '. NÚMERO: ' + house_number +
 			complement + '. CEP: ' + cep.replace('-','');
-		const wantParticipateCourses = courseStatus[course - 1].title != 'Não Tenho Interesse'
+		const wantParticipateCourses = courseStatus[course - 1].title !== 'Não Tenho Interesse'
 
 		const body = {
 			parceiro_id: parseInt(partnerId),

@@ -4,6 +4,7 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  width: 150px;
   flex-direction: column;
   align-items: center;
   background-color: #3857A3;
@@ -85,7 +86,7 @@ export const MenuButtons = styled.div`
   }
 
   }
-  
+
 `;
 
 export const MenuFooter = styled.div`
