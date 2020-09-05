@@ -26,14 +26,12 @@ const Routes = props => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={Login} />
+        <Route exact path="/" component={Dashboard} />
         <Route exact path="/login" component={Login} />
-        {/* <PrivateRoute path="/dashboard" component={Dashboard} /> */}
-        <Route path="/dashboard" component={Dashboard} />
-        {/* <PrivateRoute exact path="/profile" component={Profile} /> */}
-        <Route path="/profile" component={Profile} />
+        <PrivateRoute path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/profile" component={Profile} />
         <PrivateRoute exact path="/settings" component={Settings} />
-        <PrivateRoute exact path="/info" component={Info} /> */}   
+        <PrivateRoute exact path="/info" component={Info} />}
         <Route path="*" component={() => <h1>Page not found</h1>} />
       </Switch>
     </BrowserRouter>

@@ -19,10 +19,10 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  border-radius: 4rem 0rem 0rem 4rem;
   background-color: #fff;
-  
-  justify-content: row;  
+  border-radius: 4rem 0rem 0rem 4rem;
+
+  justify-content: row;
 
   @media (max-width: 480px) {
     border-radius: 0rem;
@@ -38,7 +38,7 @@ export const MainBody = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
 
-  
+
   @media (max-width: 480px) {
     width: 100%;
   }
@@ -63,7 +63,7 @@ export const MiddleCharts = styled.div`
       width: 100%;
     }
   }
-  
+
 `;
 
 export const SideHistory = styled.div`
