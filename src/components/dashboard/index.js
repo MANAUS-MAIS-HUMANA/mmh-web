@@ -67,10 +67,17 @@ const Dashboard = () => {
                     targetBasicBaskets={dashboardData.meta_cestas_doadas}
                     benefitedPeople={dashboardData.pessoas_impactadas}
                 />
-                <GoalsBars />
+                <GoalsBars
+                    targetBenefitedPeople={dashboardData.meta_pessoas_impactadas}
+                    benefitedPeople={dashboardData.pessoas_impactadas}
+                    targetBasicBaskets={dashboardData.meta_cestas_doadas}
+                    basicBasketsDonated={dashboardData.cestas_doadas}
+                    targetCollectedAmount={dashboardData.meta_valor_arrecadacao}
+                    collectedAmount={dashboardData.valor_arrecadados}
+                />
                 <MiddleCharts>
-                    <ChartByMonth />
-                    <NeighborhoodChart />
+                    <ChartByMonth amountByMonth={dashboardData.arrecadacao_mensal} />
+                    <NeighborhoodChart donationsByZone={dashboardData.zonas} />
                 </MiddleCharts>
             </MainBody>
 

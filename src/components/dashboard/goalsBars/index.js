@@ -1,27 +1,24 @@
 import React from 'react';
 
 import { Container, Bar } from './styles';
-import { store } from '../../../store'
 
-const GoalsBars = () => {
-
-  const { cash, basic, benefits } = store.getState().dashboard
+const GoalsBars = (props) => {
 
   const data = [
     {
-      label: 'Ajudar mais de 500 famílias',
-      status: benefits.current,
-      goal: benefits.goal,
+      label: 'Ajudar mais de 40 mil famílias',
+      status: props.benefitedPeople,
+      goal: props.targetBenefitedPeople,
     },
     {
-      label: 'Doar mais de 1500 cestas',
-      status: basic.current,
-      goal: basic.goal,
+      label: 'Doar mais de 10 mil cestas',
+      status: props.basicBasketsDonated,
+      goal: props.targetBasicBaskets,
     },
     {
-      label: 'Arrecadar 800 mil',
-      status: (cash.current/1000).toFixed(0),
-      goal: (cash.goal/1000).toFixed(0),
+      label: 'Arrecadar 670 mil',
+      status: props.collectedAmount,
+      goal: props.targetCollectedAmount,
     },
   ]
 
