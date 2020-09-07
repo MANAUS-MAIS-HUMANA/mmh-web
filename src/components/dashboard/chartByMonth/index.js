@@ -3,29 +3,37 @@ import React, { useMemo } from 'react';
 import { Container } from './styles';
 import LineChart from '../../line-chart';
 
-import { store } from '../../../store'
+const ChartByMonth = (props) => {
 
-const ChartByMonth = () => {
+  const byMonth = props.amountByMonth;
 
-  const { byMonth } = store.getState().dashboard
+  const getMaxValue = (amountByMonth) => {
+      if (amountByMonth && Array.isArray(amountByMonth)) {
+          const onlyAmounts = amountByMonth.map(obj => obj.y);
+          const maxAmount = onlyAmounts.reduce((acc, val) => Math.max(acc, val));
+          return maxAmount + 1000;
+      }
 
-  const line_data = useMemo(() => 
-    [
+      return 210000;
+  };
+
+  const line_data = useMemo(() => {
+    return [
       {
         "id": "mmh",
         "data": byMonth,
       },
-    ]
-  , [byMonth]) 
+  ];
+  }
+  , [byMonth])
 
   return (
     <Container>
       <div>
         <h4>Valor arrecadado por mês</h4>
-        <span>Detalhes</span>
       </div>
       <div>
-        <LineChart data={line_data} />
+        <LineChart data={line_data} maxValue={getMaxValue(byMonth)} />
       </div>
     </Container>
   );
