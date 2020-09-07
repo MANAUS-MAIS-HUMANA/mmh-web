@@ -2,10 +2,10 @@ import React from 'react';
 
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
 import AmountCollected from '../../components/dashboard/amountCollected';
-import DashboardHistory from '../../components/dashboard/dashboardHistory';
 import GoalsBars from '../../components/dashboard/goalsBars';
 import ChartByMonth from '../../components/dashboard/chartByMonth';
 import NeighborhoodChart from '../../components/dashboard/neighborhoodChart';
+import GreatestDonors from '../../components/dashboard/greatestDonors';
 
 import {
     Container,
@@ -29,7 +29,7 @@ const Dashboard = () => {
             </MainBody>
 
             <SideHistory>
-                <DashboardHistory />
+                <GreatestDonors />
             </SideHistory>
 
         </Container>
