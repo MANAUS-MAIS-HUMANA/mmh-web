@@ -1,12 +1,12 @@
 import React from 'react'
 import { ResponsiveLine } from '@nivo/line'
 
-const LineChart = ({ data }) => {
-  
+const LineChart = ({ data, maxValue }) => {
+
   const mainColor = "#0D2662"
   const theme = {
     axis: {
-      
+
       tickColor: mainColor,
       ticks: {
         line: {
@@ -29,7 +29,7 @@ const LineChart = ({ data }) => {
       }
     }
   };
-  
+
 
   return (
     <ResponsiveLine
@@ -37,7 +37,7 @@ const LineChart = ({ data }) => {
         theme={theme}
         margin={{ top: 50, right: 40, bottom: 50, left: 70 }}
         xScale={{ type: 'point' }}
-        yScale={{ type: 'linear', min: 0, max: 100000, stacked: true, reverse: false }} // Alterar os limites no futuro de acordo com o data
+        yScale={{ type: 'linear', min: 0, max: maxValue, stacked: true, reverse: false }} // Alterar os limites no futuro de acordo com o data
         axisTop={null}
         axisRight={null}
         axisBottom={{
@@ -71,7 +71,7 @@ const LineChart = ({ data }) => {
         pointLabelYOffset={-12}
         useMesh={true}
         legends={[
-            
+
         ]}
     />
 )

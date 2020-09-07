@@ -6,13 +6,13 @@ import { ResponsivePie } from '@nivo/pie'
 // website examples showcase many properties,
 // you'll often use just a few of them.
 export const PieChart = ({ data, colors, horizontalLength}) => {
-  
+
   const margin = 25
 
   return (
     <ResponsivePie
         data={data}
-        startAngle={90}
+        startAngle={0}
         endAngle={450}
         margin={{ top: margin, right: margin, bottom: margin, left: margin }}
         innerRadius={0.75}
@@ -23,10 +23,10 @@ export const PieChart = ({ data, colors, horizontalLength}) => {
         borderColor={{ from: 'color', modifiers: [ [ 'darker', 0.2 ] ] }}
         radialLabelsSkipAngle={0}
         radialLabel={d => `${d.formatted}`}
-        radialLabelsTextXOffset={1}
+        radialLabelsTextXOffset={10}
         radialLabelsTextColor="#3857A3"
         radialLabelsLinkOffset={0}
-        radialLabelsLinkDiagonalLength={0}
+        radialLabelsLinkDiagonalLength={10}
         radialLabelsLinkHorizontalLength={horizontalLength || 5}
         radialLabelsLinkStrokeWidth={1}
         radialLabelsLinkColor={'#3857A3'}
@@ -36,7 +36,7 @@ export const PieChart = ({ data, colors, horizontalLength}) => {
         motionStiffness={90}
         motionDamping={15}
         defs={[
-            
+
         ]}
         fill={[
             {
@@ -89,7 +89,7 @@ export const PieChart = ({ data, colors, horizontalLength}) => {
             }
         ]}
         legends={[
-            
+
         ]}
     />
 )

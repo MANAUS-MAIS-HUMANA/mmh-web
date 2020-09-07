@@ -6,7 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
 
   >div {
-    
+
     &:first-child {
       display: flex;
       justify-content: space-between;
@@ -31,22 +31,22 @@ export const Container = styled.div`
       }
     }
   }
-  
+
 `;
 
 export const NeighList = styled.div`
   background-color: #F7F7FF;
   border-radius: 2rem;
   width: 100%;
-  height: 34.4rem;
 
     >div {
+
       &:first-child {
         height: 21.1rem;
       }
       &:last-child {
-        height: 13.1rem;
-        padding: 0rem 2.4rem 2.4rem 2.4rem;
+        height: auto;
+        padding: 0rem 2.4rem 0rem 2.4rem;
       }
     }
 `;

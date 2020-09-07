@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { Container, Values, ChartAndLegend, Chart, Legend} from './styles';
 import PieChart from '../../pie-chart';
@@ -7,15 +6,7 @@ import blue_rect from '../../../assets/blue_rect.svg'
 import green_rect from '../../../assets/green_rect.svg'
 import houses_img from '../../../assets/houses_img.svg'
 
-import { store } from '../../../store'
-
-import { setAmount } from '../../../store/modules/dashboard/actions'
-
-const AmountCollected = () => {
-
-  const { cash, basic, benefits, data } = store.getState().dashboard
-  const dispatch = useDispatch()
-  dispatch(setAmount(data))
+const AmountCollected = (props) => {
 
   var formatter = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -25,25 +16,25 @@ const AmountCollected = () => {
   const chart_data = [
     {
       "id": "amount",
-      "label": 'Valor obtido',
-      "formatted": `R$ ${(cash.current/1000).toFixed(0)} mil`,
-      "value": cash.current,
+      "label": 'Total de cestas obtidas',
+      "formatted": `${props.basicBasketsDonated}`,
+      "value": props.basicBasketsDonated,
     },
     {
       "id": "goal",
       "label": 'Faltam',
-      "formatted": `R$ 800 mil`,
-      "value": cash.goal - cash.current,
+      "formatted": `${props.targetBasicBaskets}`,
+      "value": props.targetBasicBaskets - props.basicBasketsDonated,
     },
-  ] 
- 
+  ]
+
   return (
     <Container>
       <Values>
         <h1>Valor arrecadado</h1>
-        <h2>{formatter.format(cash.current)}</h2>
-        <h3>+{benefits.current}<span>&nbsp;pessoas beneficiadas</span></h3>
-        <h4>+{basic.current}<span>&nbsp;cestas básicas doadas</span></h4>
+        <h2>{formatter.format(props.collectedAmount)}</h2>
+        <h3>+{props.benefitedPeople}<span>&nbsp;pessoas beneficiadas</span></h3>
+        <h3>+{props.basicBasketsDonated}<span>&nbsp;cestas básicas doadas</span></h3>
       </Values>
       <ChartAndLegend>
         <Chart>
@@ -53,19 +44,19 @@ const AmountCollected = () => {
           <div>
             <div>
               <img src={blue_rect} alt='Legenda' />
-              <h4>Meta</h4>
+              <h4>Meta de cestas</h4>
             </div>
             <div>
               <img src={green_rect} alt='Legenda' />
-              <h4>Valor obtido</h4>
+              <h4>Total de cestas obtidas</h4>
             </div>
           </div>
           <div>
             <img src={houses_img} alt='Casas' />
-        </div>
+          </div>
         </Legend>
       </ChartAndLegend>
-      
+
     </Container>
   )
 }
