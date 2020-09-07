@@ -3,46 +3,59 @@ import React from 'react';
 import { Container, Neighborhood, NeighList } from './styles'
 import PieChart from '../../pie-chart';
 
-const NeighborhoodChart = () => {
-
-  const colors = ["#7AFFB7", " #8566AA", "#3857A3", "#0D2662"]
+const NeighborhoodChart = (props) => {
 
   const data = [
     {
-      "id": "Da Paz",
-      "label": "Da Paz",
-      "formatted": 599,
-      "value": 599,
-      "color": colors[0]
+      "id": "centro_oeste",
+      "label": "Centro-Oeste",
+      "formatted": props.donationsByZone.centro_oeste,
+      "value": props.donationsByZone.centro_oeste,
+      "color": '#7AFFB7',
     },
     {
-      "id": "Cidade Nova",
-      "label": "Cidade Nova",
-      "formatted": 201,
-      "value": 201,
-      "color": colors[1]
+      "id": "centro_sul",
+      "label": "Centro-Sul",
+      "formatted": props.donationsByZone.centro_sul,
+      "value": props.donationsByZone.centro_sul,
+      "color": '#8566AA',
     },
     {
-      "id": "Colônia Santo Antônio",
-      "label": "Colônia Santo Antônio",
-      "formatted": 588,
-      "value": 588,
-      "color": colors[2]
+      "id": "leste",
+      "label": "Leste",
+      "formatted": props.donationsByZone.leste,
+      "value": props.donationsByZone.leste,
+      "color": '#3857A3',
     },
     {
-      "id": "Cidade de Deus",
-      "label": "Cidade de Deus",
-      "formatted": 157,
-      "value": 157,
-      "color": colors[3]
+      "id": "norte",
+      "label": "Norte",
+      "formatted": props.donationsByZone.norte,
+      "value": props.donationsByZone.norte,
+      "color": '#0D2662',
     },
-  ]
+    {
+      "id": "oeste",
+      "label": "Oeste",
+      "formatted": props.donationsByZone.oeste,
+      "value": props.donationsByZone.oeste,
+      "color": '#00FF00',
+    },
+    {
+      "id": "sul",
+      "label": "Sul",
+      "formatted": props.donationsByZone.sul,
+      "value": props.donationsByZone.sul,
+      "color": '#FED983',
+    },
+  ].filter(obj => obj.value > 0)
+
+  const colors = data.map(zone => zone.color);
 
   return (
     <Container>
       <div>
-        <h4>Bairros mais beneficiados</h4>
-        <span>Detalhes</span>
+        <h4>Zonas beneficiadas (em %)</h4>
       </div>
       <NeighList>
         <div>

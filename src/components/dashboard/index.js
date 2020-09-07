@@ -29,7 +29,14 @@ const Dashboard = () => {
         familias_atendidas: 0.0,
         meta_familias_atendidas: 0.0,
         instituicoes_contemplada: 0.0,
-        zonas: [],
+        zonas: {
+            sul: 0.0,
+            oeste: 0.0,
+            norte: 0.0,
+            leste: 0.0,
+            centro_sul: 0.0,
+            centro_oeste: 0.0,
+        },
         arrecadacao_mensal: [
             { x: 'Abril', y: 0.0 },
             { x: 'Maio', y: 0.0 },
