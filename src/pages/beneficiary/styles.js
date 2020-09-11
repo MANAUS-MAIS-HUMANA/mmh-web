@@ -41,3 +41,13 @@ export const ButtonContainer = styled.div`
     border-radius: 5px;
   }
 `;
+
+export const TableContainer = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  padding: 3rem 10rem 0rem 5rem;
+`;
