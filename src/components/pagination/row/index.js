@@ -14,6 +14,18 @@ import {
 } from './styles';
 
 const Row = (props) => {
+
+    const convertDate = (dateString) => {
+        const d = new Date(dateString);
+        const isValidDate = d instanceof Date && !isNaN(d);
+        if (isValidDate) {
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            return `${d.getDate()}/${month}/${d.getFullYear()}`;
+        }
+
+        return '-';
+    };
+
     return (
         <Container rowType={props.rowType}>
             <CheckBoxDiv>
@@ -24,7 +36,7 @@ const Row = (props) => {
                     props.rowType === 'header' ?
                         <h3>Nome</h3>
                     :
-                        <h4>Joãozinho Carlos Pedro Pedroso</h4>
+                        <h4>{props.name}</h4>
                 }
             </NameDiv>
             <StatusDiv>
@@ -32,7 +44,7 @@ const Row = (props) => {
                     props.rowType === 'header' ?
                         <h3>Status</h3>
                     :
-                        <h4>Ativo</h4>
+                        <h4>{props.status}</h4>
                 }
             </StatusDiv>
             <BasketDiv>
@@ -40,7 +52,7 @@ const Row = (props) => {
                     props.rowType === 'header' ?
                         <h3>Cestas recebidas</h3>
                     :
-                        <h4>5</h4>
+                        <h4>{props.totalBasket}</h4>
                 }
             </BasketDiv>
             <LastDonationDateDiv>
@@ -48,7 +60,7 @@ const Row = (props) => {
                     props.rowType === 'header' ?
                         <h3>Último recebimento</h3>
                     :
-                        <h4>05/09/2020</h4>
+                        <h4>{convertDate(props.lastDonation)}</h4>
                 }
             </LastDonationDateDiv>
             <TotalFamilyMembersDiv>
@@ -56,7 +68,7 @@ const Row = (props) => {
                     props.rowType === 'header' ?
                         <h3>Membros na família</h3>
                     :
-                        <h4>4</h4>
+                        <h4>{props.totalFamilyMembers}</h4>
                 }
             </TotalFamilyMembersDiv>
             <ActionDiv>

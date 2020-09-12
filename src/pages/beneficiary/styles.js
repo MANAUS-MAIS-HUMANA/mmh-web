@@ -51,3 +51,47 @@ export const TableContainer = styled.div`
   justify-content: start;
   padding: 3rem 10rem 0rem 5rem;
 `;
+
+export const PaginationContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    font-size: 3rem;
+    font-weight: normal;
+  }
+`;
+
+export const PreviousDiv = styled.div`
+  margin-left: 2rem;
+`;
+
+export const CurrentPageDiv = styled.div`
+  width: 5rem;
+  height: auto;
+  display: flex;
+  margin: 0rem 2rem 0rem 2rem;
+
+  input {
+    text-align: center;
+  }
+`;
+
+export const NextDiv = styled.div`
+  margin-right: 2rem;
+`;

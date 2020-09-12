@@ -47,6 +47,7 @@ export const StatusDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;
 
 export const BasketDiv = styled.div`
@@ -55,6 +56,7 @@ export const BasketDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;
 
 export const LastDonationDateDiv = styled.div`
@@ -63,6 +65,7 @@ export const LastDonationDateDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;
 
 export const TotalFamilyMembersDiv = styled.div`
@@ -71,6 +74,7 @@ export const TotalFamilyMembersDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;
 
 export const ActionDiv = styled.div`
@@ -79,4 +83,5 @@ export const ActionDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;
