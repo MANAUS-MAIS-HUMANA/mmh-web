@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 import Checkbox from "@material-ui/core/Checkbox";
 
@@ -75,8 +76,19 @@ const Row = (props) => {
                 {
                     props.rowType === 'header' ?
                         <h3>Ações</h3>
-                    :
-                        <h4>Detalhes</h4>
+                        :
+                        <NavLink
+                        key={'AtualizarBeneficiario'}
+                        to={{
+                            pathname: '/beneficiary/create',
+                            extra: { beneficiaryId: props.beneficiaryId }
+                        }}
+                    >
+                        {/*<Button className='button' variant='contained' color='primary'>
+                            Detalhes
+                        </Button>*/}
+                        <label>Detalhes</label>
+                    </NavLink>
                 }
             </ActionDiv>
         </Container>

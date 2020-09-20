@@ -84,4 +84,12 @@ export const ActionDiv = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  label {
+    &:hover {
+      color: #0D2662;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
 `;
