@@ -12,21 +12,26 @@ import api from '../../services/api'
 import { toast } from 'react-toastify'
 import to from 'await-to-js'
 
-const Profile = () => {
+const Profile = (props) => {
 	// Variáveis de estado da página
 
 	const perfis = localStorage.getItem('@mmh/perfis')
 	const showParceiro = perfis && !perfis.includes('parceiro')
 
 	const [married, setMarried] = useState(false)
-	const [employed, setEmployed] = useState(true)
 	const [ownBusiness, setOwnBusiness] = useState(true)
 	const [typeActivities, setTypeActivities] = useState(['Online', 'Presencial'])
 	const [pageLoading, setPageLoading] = useState(false)
 	const [partners, setPartners] = useState([])
 	const [neighborhoods, setNeighborhoods] = useState([])
+	const [beneficiaryId] = useState(
+		props.location.extra ? props.location.extra.beneficiaryId : null
+	)
+	const [beneficiaryData, setBeneficiaryData] = useState(null)
 
 	// Obtendo a lista de parceiros, caso o usuário logado não seja uma instituição parceira
+
+	const parseTypeActivities = value => value ? value.split(',') : [];
 
 	useEffect(() => {
 		async function getNeighborhoods() {
@@ -58,12 +63,28 @@ const Profile = () => {
 			}));
 		}
 
+		async function getBeneficiaryData() {
+			if (!beneficiaryId) {
+				return;
+			}
+
+		    const [ error, response ] = await to(api.get(`/beneficiarios/${beneficiaryId}`));
+
+		    if (error) {
+		        return;
+		    }
+
+		    setBeneficiaryData(response.data.data);
+			setOwnBusiness(!!response.data.data.gostaria_montar_negocio);
+			setTypeActivities(parseTypeActivities(response.data.data.tipo_curso))
+		}
+
 		getParceiros();
 		getNeighborhoods();
-	}, [showParceiro])
+		getBeneficiaryData();
+	}, [showParceiro, beneficiaryId])
 
-	// Obeto com os estados civis possíveis
-
+	// Objeto com os estados civis possíveis
 	const marialStatus = [
 		{ id: '1', title: 'Casado(a)' },
 		{ id: '2', title: 'Divorciado(a)' },
@@ -73,21 +94,115 @@ const Profile = () => {
 		{ id: '6', title: 'Viúvo(a)' }
 	]
 
+	const getMaritalStatus = maritalStatus => {
+		switch (maritalStatus) {
+			case 'Casado':
+				return '1';
+			case 'Divorciado':
+				return '2';
+			case 'Separado':
+				return '3';
+			case 'Solteiro':
+				return '4';
+			case 'União Estável':
+				return '5';
+			case 'Viúvo':
+				return '6';
+			default:
+				return null;
+		}
+	};
+
 	// Situacões de moradia
 
 	const houseStatus = [
-		{ id: '1', title: 'Própria' },
-		{ id: '2', title: 'Alugada' },
-		{ id: '3', title: 'Cedido' },
-		{ id: '4', title: 'Própria Financiada'}
+		{ id: '1', title: 'Alugada' },
+		{ id: '2', title: 'Cedido' },
+		{ id: '3', title: 'Local de trabalho' },
+		{ id: '4', title: 'Outros' },
+		{ id: '5', title: 'Própria' },
+		{ id: '6', title: 'Própria Financiada' },
 	]
+
+	const getHouseStatus = status => {
+		switch (status) {
+			case 'Alugada':
+				return '1';
+			case 'Cedido':
+				return '2';
+			case 'Local de trabalho':
+				return '3';
+			case 'Outros':
+				return '4';
+			case 'Própria':
+				return '5';
+			case 'Própria Financiada':
+				return '6';
+			default:
+				return null;
+		}
+	};
 
 	// Modalidade de ocupacão
 
 	const jobObj = [
-		{ id: '1', title: 'CLT' },
-		{ id: '2', title: 'Autônomo' }
+		{ id: '1', title: 'Aposentado' },
+		{ id: '2', title: 'Beneficiário de auxílio doença' },
+		{ id: '3', title: 'Bens alugados a terceiros' },
+		{ id: '4', title: 'Desempregado' },
+		{ id: '5', title: 'Pensão alimentícia' },
+		{ id: '6', title: 'Pensionista' },
+		{ id: '7', title: 'Proprietário ou participação em cotas de empresa' },
+		{ id: '8', title: 'Trabalho autônomo ou no mercado informal' },
+		{ id: '9', title: 'Trabalho no mercado formal' },
 	]
+
+	const getJobStatus = status => {
+		switch (status) {
+			case 'Aposentado':
+				return '1';
+			case 'Beneficiário de auxílio doença':
+				return '2';
+			case 'Bens Alugados a Terceiros':
+				return '3';
+			case 'Desempregado':
+				return '4';
+			case 'Pensão alimentícia':
+				return '5';
+			case 'Pensionista':
+				return '6';
+			case 'Proprietário ou participação em cotas de empresa':
+				return '7';
+			case 'Trabalho autônomo ou no mercado informal':
+				return '8';
+			case 'Trabalho no mercado formal':
+				return '9';
+			default:
+				return null;
+		}
+	};
+
+	// Pessoas na residência
+	const peopleInHouse = [
+		{ id: '1', title: '1' },
+		{ id: '2', title: '2' },
+		{ id: '3', title: '3' },
+		{ id: '4', title: '4' },
+		{ id: '5', title: '5' },
+		{ id: '6', title: '6 ou mais' }
+	]
+
+	const getPeopleInHouse = totalPeople => {
+		if (totalPeople === '6 ou mais') {
+			return '6';
+		}
+
+		if (totalPeople) {
+			return totalPeople;
+		}
+
+		return null;
+	};
 
 	// Cursos que o usuário tem interesse
 
@@ -133,23 +248,64 @@ const Profile = () => {
 		course: Yup.string().required('É obrigatório selecionar uma opção de cursos'),
 		address: Yup.string()
 			.required('O endereço é obrigatório'),
-		cep: Yup.string()
-			.min(9, 'Insira o CEP completo')
-			.required('O CEP é obrigatório'),
-		house_number: Yup.string()
-			.required('O número da casa é obrigatório'),
-		compl: Yup.string(),
 		neighborhood: Yup.string()
 			.required('O bairro é obrigatório'),
-		nation: Yup.string()
-			.required('A nacionalidade é obrigatória'),
 		coliving: Yup.string(),
 		house_status: Yup.string(),
-		job: employed? Yup.string()
-			.required('Este item é obrigatório'):
-			Yup.string(),
+		job: Yup.string(),
 		income: Yup.string(),
 	});
+
+	const formatCPF = cpf => {
+		if (!cpf) {
+			return null;
+		}
+
+		if (cpf.length > 11) {
+			return cpf;
+		}
+
+		const missing = 11 - cpf.length;
+		const missingZeros = '0'.repeat(missing);
+		const n = missingZeros + cpf;
+
+		return `${n[0]}${n[1]}${n[2]}.${n[3]}${n[4]}${n[5]}.${n[6]}${n[7]}${n[8]}-${n[9]}${n[10]}`;
+	};
+
+	const formatPhone = phone => {
+		if (!phone) {
+			return null;
+		}
+
+		if (phone.length !== 11) {
+			return phone;
+		}
+		const p = phone;
+
+		return `(${p[0]}${p[1]}) ${p[2]}${p[3]}${p[4]}${p[5]}${p[6]}-${p[7]}${p[8]}${p[9]}${p[10]}`;
+	};
+
+	const formatDataNascimento = dataNascimento => {
+		if (!dataNascimento) {
+			return null;
+		}
+
+		if (dataNascimento.length !== 10) {
+			return dataNascimento;
+		}
+
+		const d = dataNascimento;
+		return `${d[8]}${d[9]}/${d[5]}${d[6]}/${d[0]}${d[1]}${d[2]}${d[3]}`;
+	}
+
+	const formatMonthlyIncome = monthlyIncome => {
+		if (!monthlyIncome) {
+			return null;
+		}
+
+		return `R$ ${monthlyIncome.split('.')[0]}`;
+	};
+
 
 	// Máscara para campos com formatos específicos
 	function mask(i, type) {
@@ -158,12 +314,6 @@ const Profile = () => {
 		if (isNaN(v[v.length - 1])) { // impede entrar outro caractere que não seja número
 			i.value = v.substring(0, v.length - 1);
 			return;
-		}
-
-
-		if (type === 'cep') {
-			i.setAttribute("maxlength", "9"); // Máximo de 9 caracteres
-			if (v.length === 5) i.value += "-";
 		}
 
 		if (type === 'cpf') {
@@ -195,16 +345,14 @@ const Profile = () => {
 	// Funcão de submit do form e criacão do objeto de body para a requisicão.
 	function handleSubmit(data) {
 		const {
-			partner_id, income, job, house_status, coliving, neighborhood, compl, house_number,
-			cep, address, partner_cpf, partner_name, marial, birth, mobile, cpf, email, name, course
+			partner_id, income, job, house_status, coliving, neighborhood, address, partner_cpf,
+			partner_name, marial, birth, mobile, cpf, email, name, course
 		} = data
 
 		const localStoragePartnerId = localStorage.getItem('@mmh/partner_id')
 		const partnerId = (partner_id === '') ? localStoragePartnerId : partner_id
-		const complement = compl ? ('. COMPLEMENTO: ' + compl) : '';
-		const fullAddress = 'LOGRADOURO: '+ address + '. NÚMERO: ' + house_number +
-			complement + '. CEP: ' + cep.replace('-','');
 		const wantParticipateCourses = courseStatus[course - 1].title !== 'Não Tenho Interesse'
+		const incomeWithoutDecimalPart = income.split('.')[0].replace(/\D/g, '');
 
 		const body = {
 			parceiro_id: parseInt(partnerId),
@@ -212,18 +360,18 @@ const Profile = () => {
 			cpf,
 			email,
 			data_nascimento: `${birth.slice(-4)}-${birth.slice(3,5)}-${birth.slice(0,2)}`,
-			trabalho: job ? jobObj[job-1].title : 'Desempregado',
-			esta_desempregado: !employed,
-			estado_civil_id: marial,
+			trabalho: job ? jobObj[job-1].title : null,
+			esta_desempregado: job ? jobObj[job-1].title === 'Desempregado' : null,
+			estado_civil_id: parseInt(marial),
 			nome_conjuge: partner_name || ``,
 			cpf_conjuge: partner_cpf || ``,
 			total_residentes: coliving,
 			situacao_moradia: houseStatus[house_status-1]?.title || ``,
-			renda_mensal: parseInt(income.replace(/\D/g, '')),
+			renda_mensal: parseInt(incomeWithoutDecimalPart),
 			gostaria_montar_negocio: ownBusiness,
 			gostaria_participar_cursos: wantParticipateCourses,
-			curso: course,
-			tipo_curso: typeActivities.join(', '),
+			curso_id: parseInt(course),
+			tipo_curso: typeActivities.join(','),
 			concorda_informacoes_verdadeiras: true,
 			telefones: [
 				{
@@ -233,7 +381,7 @@ const Profile = () => {
 			],
 			enderecos: [
 				{
-					endereco: fullAddress,
+					endereco: address,
 					bairro_id: neighborhood,
 					zona_id: null,
 					cidade_id: 1
@@ -242,7 +390,11 @@ const Profile = () => {
 			]
 		}
 
-		handlePostBenefited(body)
+		if (!beneficiaryId) {
+			handlePostBenefited(body);
+		} else {
+			handlePutBenefited(body, beneficiaryId);
+		}
 	}
 
 	// Envio de dados para a API
@@ -270,111 +422,235 @@ const Profile = () => {
 		setPageLoading(false)
 	}
 
+	async function handlePutBenefited (body, beneficiaryId) {
+		setPageLoading(true);
+
+		try {
+			const response = await api.put(`/beneficiarios/${beneficiaryId}`, {...body});
+
+			if(response.data) {
+				toast.success(`Beneficiário atualizado com sucesso`);
+			} else {
+				toast.error(`Erro ao atualizar os dados do beneficiário`);
+			}
+		} catch(error) {
+			toast.error(`Erro ao cadastrar o beneficiário`);
+			error.response && error.response.data && error.response.data.errors.map(
+				error => toast.error(error)
+			);
+		}
+
+		setPageLoading(false);
+	}
+
 	// Início do componente.
 
 	return (
 		<Layout>
 			<Container>
 				<Header>
-					<h2>Cadastro de Beneficiários</h2>
+					{
+						beneficiaryId
+							? <h2>Atualização de Beneficiário</h2>
+							: <h2>Cadastro de Beneficiários</h2>
+					}
 				</Header>
 				<Form schema={schema} onSubmit={handleSubmit} >
 					<Line>
 					{
 						showParceiro ?
-							<FormSelect label='Parceiro' name='partner_id' options={partners} required/>
+							<FormSelect
+								label='Parceiro'
+								name='partner_id'
+								value={beneficiaryData ? beneficiaryData.parceiro_id : null}
+								options={partners}
+								required
+							/>
 						:
 							<></>
 					}
 					</Line>
 					<Line>
-						<FormInput label='Nome' name='name' placeholder='ex. João Pedro' required />
-						<FormInput label='Email' name='email' placeholder='ex. example@example.com' required />
+						<FormInput
+							label='Nome'
+							name='name'
+							placeholder='ex. João Pedro'
+							value={beneficiaryData ? beneficiaryData.nome : null}
+							required
+						/>
+						<FormInput
+							label='Email'
+							name='email'
+							placeholder='ex. example@example.com'
+							value={beneficiaryData ? beneficiaryData.email : null}
+							required
+						/>
 					</Line>
 					<Line>
 						<div className='halfgrid'>
-							<FormInput label='CPF' name='cpf' placeholder='ex. 000.000.000-10' required onChange={event => mask(event.target, 'cpf')} />
-							<FormInput label='Celular' name='mobile' placeholder='ex. (92) 99999-9999' required onChange={event => mask(event.target, 'mobile')} />
+							<FormInput
+								label='CPF'
+								name='cpf'
+								placeholder='ex. 000.000.000-10'
+								value={beneficiaryData ? formatCPF(beneficiaryData.cpf) : null}
+								required
+								onChange={event => mask(event.target, 'cpf')}
+							/>
+							<FormInput
+								label='Celular'
+								name='mobile'
+								placeholder='ex. (92) 99999-9999'
+								value={beneficiaryData
+									? formatPhone(beneficiaryData.telefones[0].telefone)
+									: null
+								}
+								required
+								onChange={event => mask(event.target, 'mobile')}
+							/>
 						</div>
 						<div className='halfgrid'>
-							<FormInput label='Data de Nascimento' name='birth' placeholder='ex. dd/mm/aaaa' required onChange={event => mask(event.target, 'date')} />
+							<FormInput
+								label='Data de Nascimento'
+								name='birth'
+								placeholder='ex. dd/mm/aaaa'
+								value={beneficiaryData
+									? formatDataNascimento(beneficiaryData.data_nascimento)
+									: null
+								}
+								required
+								onChange={event => mask(event.target, 'date')}
+							/>
 							<FormSelect
 								label='Estado Civil'
 								name='marial'
 								options={marialStatus}
+								value={beneficiaryData
+									? getMaritalStatus(beneficiaryData.estado_civil.nome)
+									: null
+								}
 								onChange={event => setMarried(event.target.value)}
 								required
 							/>
 						</div>
 					</Line>
 					{
-						married === '1' ?
+						married === '1' || (beneficiaryData &&
+								getMaritalStatus(beneficiaryData.estado_civil.nome) === '1') ?
 							<Line>
-								<FormInput label='Nome do cônjuge' name='partner_name' placeholder='ex. João Pedro' required />
-								<FormInput label='CPF do Cônjuge' name='partner_cpf' placeholder='ex. 000.000.000-10' required onChange={event => mask(event.target, 'cpf')} />
+								<FormInput
+									label='Nome do cônjuge'
+									name='partner_name'
+									value={beneficiaryData ? beneficiaryData.nome_conjuge : null}
+									placeholder='ex. João Pedro'
+									required
+								/>
+								<FormInput
+									label='CPF do Cônjuge'
+									name='partner_cpf'
+									placeholder='ex. 000.000.000-10'
+									value={beneficiaryData
+										? formatCPF(beneficiaryData.cpf_conjuge)
+										: null
+									}
+									required
+									onChange={event => mask(event.target, 'cpf')}
+								/>
 							</Line>
 							:
 							<></>
 					}
 					<Line>
-						<FormInput label='Endereço' name='address' placeholder='Informe seu endereço' required />
+						<FormInput
+							label='Endereço Completo'
+							name='address'
+							placeholder='Informe a rua, número, complemento (se houver) e CEP'
+							value={beneficiaryData
+								? beneficiaryData.enderecos[0].endereco
+								: null
+							}
+							required />
 						<FormSelect
 							label='Bairro'
 							name='neighborhood'
 							options={neighborhoods}
+							value={beneficiaryData
+								? beneficiaryData.enderecos[0].bairro.id
+								: null
+							}
 							required
 						/>
 					</Line>
 					<Line>
 						<div className='halfgrid'>
-							<FormInput label='Número' name='house_number' placeholder='ex. 28 B' required />
-							<FormInput label='Complemento' name='compl' placeholder='ex. Próximo ao Shopping' />
-						</div>
-						<div className='halfgrid'>
-							<FormInput label='CEP' name='cep' placeholder='ex. 69000-000' required onChange={event => mask(event.target, 'cep')} />
-							<FormInput label='Nacionalidade' name='nation' placeholder='ex. Brasileiro' required />
-						</div>
-					</Line>
-					<Line>
-						<div className='halfgrid'>
-							<FormInput label='Pessoas em sua residência' name='coliving' placeholder='ex. 3' onChange={event => mask(event.target, 'number')} />
+							<FormSelect
+								label='Pessoas em sua residência'
+								name='coliving'
+								value={beneficiaryData
+									? getPeopleInHouse(beneficiaryData.total_residentes)
+									: null
+								}
+								options={peopleInHouse}
+							/>
 							<FormSelect
 								label='Situação de moradia'
 								name='house_status'
+								value={beneficiaryData
+									? getHouseStatus(beneficiaryData.situacao_moradia)
+									: null
+								}
 								options={houseStatus}
-
 							/>
 						</div>
-						<div className='halfgrid'>
-							<FormRadio label='Trabalha?' required options={['Sim', 'Não']} value={employed} onChange={(status) => setEmployed(status)} />
-							{
-								employed &&
-								<FormSelect
-									label='Trabalho'
-									name='job'
-									options={jobObj}
-									required
-								/>
+						<FormSelect
+							label='Trabalho'
+							name='job'
+							value={beneficiaryData
+								? getJobStatus(beneficiaryData.trabalho)
+								: null
 							}
-						</div>
+							options={jobObj}
+						/>
 					</Line>
 					<Line>
 						<div className='halfgrid'>
-							<FormInput label='Renda Mensal' name='income' placeholder='ex. R$ 1000' onChange={event => mask(event.target, 'money')} />
-							<FormRadio label='Gostaria de montar um negócio?' options={['Sim', 'Não']} required value={ownBusiness} onChange={(status) => setOwnBusiness(status)} />
+							<FormInput
+								label='Renda Mensal'
+								name='income'
+								placeholder='ex. R$ 1000'
+								value={beneficiaryData
+									? formatMonthlyIncome(beneficiaryData.renda_mensal)
+									: null
+								}
+								onChange={event => mask(event.target, 'money')}
+							/>
+							<FormRadio
+								label='Gostaria de montar um negócio?'
+								options={['Sim', 'Não']}
+								required value={ownBusiness}
+								onChange={(status) => setOwnBusiness(status)}
+							/>
 						</div>
 						<div className='halfgrid'>
 							<FormSelect
 								label='Tem interesse em participar de cursos, palestras e oficinas?'
 								name='course'
 								options={courseStatus}
+								value={beneficiaryData
+									? beneficiaryData.curso_id
+									: null
+								}
 								required
 							/>
-							<FormCheck label='Quais tipos de cursos?' options={['Online', 'Presencial']} required value={typeActivities} onChange={(option, value) => {
-								const elements = value.filter(element => element !== option)
-								value.includes(option) ? setTypeActivities([...elements]) : setTypeActivities([...value, option])
-							}} />
-
+							<FormCheck
+								label='Quais tipos de cursos?'
+								options={['Online', 'Presencial']}
+								required
+								value={typeActivities}
+								onChange={(option, value) => {
+									const elements = value.filter(element => element !== option)
+									value.includes(option) ? setTypeActivities([...elements]) : setTypeActivities([...value, option])
+								}}
+							/>
 						</div>
 					</Line>
 					<Footer>

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import { isAuthenticated } from "../services/auth";
 
+import Beneficiary from "../pages/beneficiary"
 import Dashboard from "../pages/dashboard";
 import Login from "../pages/login";
 import Profile from "../pages/profile";
@@ -29,7 +30,8 @@ const Routes = props => {
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/login" component={Login} />
         <PrivateRoute path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/profile" component={Profile} />
+        <PrivateRoute exact path="/profile" component={Beneficiary} />
+        <PrivateRoute path="/beneficiary/create" component={Profile} />
         <PrivateRoute exact path="/settings" component={Settings} />
         <PrivateRoute exact path="/info" component={Info} />}
         <Route path="*" component={() => <h1>Page not found</h1>} />
