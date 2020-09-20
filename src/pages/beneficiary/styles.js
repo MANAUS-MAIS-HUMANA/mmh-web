@@ -24,21 +24,49 @@ export const Header = styled.div`
   }
 `;
 
-export const ButtonContainer = styled.div`
+export const ActionContainer = styled.div`
   width: 100%;
   height: auto;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
-  margin-right: 20rem;
+  justify-content: space-between;
+`;
+
+export const ButtonContainer = styled.div`
+  margin-right: 10rem;
+  display: flex;
+  flex-direction: row;
 
   .button {
     background-color: #3857A3;
     font-size: 16px;
-    margin-left: 3rem;
     font-weight: normal;
     border-radius: 5px;
+  }
+`;
+
+export const ButtonDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding-right: 2.5rem;
+`;
+
+export const FormContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 5rem;
+
+  input {
+    width: 50rem;
+    min-height: 3.25rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #E6EAED;
+    padding: 0rem 2rem;
+    font-size: 1.2rem;
   }
 `;
 

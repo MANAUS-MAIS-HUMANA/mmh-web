@@ -10,8 +10,11 @@ import api from '../../services/api';
 import {
     Container,
     Header,
+    ActionContainer,
     ButtonContainer,
     TableContainer,
+    FormContainer,
+    ButtonDiv,
     PaginationContainer,
     PreviousDiv,
     CurrentPageDiv,
@@ -31,6 +34,7 @@ const Beneficiary = () => {
     const [currentPage, SetCurrentPage] = useState(1);
     const [lastPage, SetLastPage] = useState(1);
     const [limit] = useState(10);
+    const [searchValue, setSearchValue] = useState();
 
     const partnerId = !isAdminSession ? parseInt(localStorage.getItem('@mmh/partner_id')) : null;
 
@@ -39,6 +43,10 @@ const Beneficiary = () => {
             let endpoint = `/beneficiarios/basico?page=${page}&limit=${limit}`;
             if (partnerId && !isNaN(partnerId)) {
                 endpoint = endpoint + `&partner_id=${partnerId}`;
+            }
+
+            if (searchValue) {
+                endpoint = endpoint + `&search=${searchValue}`;
             }
 
             const [ error, response ] = await to(api.get(endpoint));
@@ -56,7 +64,7 @@ const Beneficiary = () => {
             getBeneficiaryData();
             SetshouldGetBeneficiaryData(false);
         }
-    }, [shouldGetBeneficiaryData, page, limit, lastPage, partnerId]);
+    }, [shouldGetBeneficiaryData, page, limit, lastPage, partnerId, searchValue]);
 
     const changePage = (event) => {
         SetCurrentPage(event.target.value);
@@ -74,6 +82,22 @@ const Beneficiary = () => {
 
         if (page !== newPage) {
             SetPage(newPage);
+            SetshouldGetBeneficiaryData(true);
+        }
+    };
+
+    const setSearch = (data) => {
+        setSearchValue(data.searchBox);
+        SetPage(1);
+        SetCurrentPage(1);
+        SetshouldGetBeneficiaryData(true);
+    }
+
+    const resetSearch = (event) => {
+        if (!event.target.value) {
+            setSearchValue(null);
+            SetPage(1);
+            SetCurrentPage(1);
             SetshouldGetBeneficiaryData(true);
         }
     };
@@ -114,19 +138,34 @@ const Beneficiary = () => {
                 <Header>
                     <h2>Gestão de beneficiados</h2>
                 </Header>
-                <ButtonContainer>
-                    <Button className='button' disabled variant='contained' color='primary'>
-                        Ativar beneficiário
-                    </Button>
-                    <Button className='button' disabled variant='contained' color='primary'>
-                        Desativar beneficiário
-                    </Button>
-                    <NavLink to={'/beneficiary/create'} key={'Criar'}>
-                        <Button className='button' variant='contained' color='primary'>
-                            Adicionar Beneficiário
-                        </Button>
-                    </NavLink>
-                </ButtonContainer>
+                <ActionContainer>
+                    <FormContainer>
+                        <Form onSubmit={setSearch}>
+                            <Input
+                                name={'searchBox'}
+                                placeholder={'Busque por nome, email ou CPF e pressione ENTER'}
+                                onChange={resetSearch}
+                            />
+                        </Form>
+                    </FormContainer>
+                    <ButtonContainer>
+                        <ButtonDiv>
+                            <Button className='button' disabled variant='contained' color='primary'>
+                                Ativar beneficiário
+                            </Button>
+                        </ButtonDiv>
+                        <ButtonDiv>
+                            <Button className='button' disabled variant='contained' color='primary'>
+                                Desativar beneficiário
+                            </Button>
+                        </ButtonDiv>
+                        <NavLink to={'/beneficiary/create'} key={'Criar'}>
+                            <Button className='button' variant='contained' color='primary'>
+                                Adicionar Beneficiário
+                            </Button>
+                        </NavLink>
+                    </ButtonContainer>
+                </ActionContainer>
                 <TableContainer>
                     <Row rowType={'header'}/>
                     {
