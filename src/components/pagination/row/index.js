@@ -14,6 +14,8 @@ import {
     ActionDiv,
 } from './styles';
 
+import { addInLocalStorage } from '../../../services/utils';
+
 const Row = (props) => {
 
     const convertDate = (dateString) => {
@@ -74,21 +76,15 @@ const Row = (props) => {
             </TotalFamilyMembersDiv>
             <ActionDiv>
                 {
-                    props.rowType === 'header' ?
-                        <h3>Ações</h3>
-                        :
-                        <NavLink
-                        key={'AtualizarBeneficiario'}
-                        to={{
-                            pathname: '/beneficiary/create',
-                            extra: { beneficiaryId: props.beneficiaryId }
-                        }}
-                    >
-                        {/*<Button className='button' variant='contained' color='primary'>
-                            Detalhes
-                        </Button>*/}
-                        <label>Detalhes</label>
-                    </NavLink>
+                    props.rowType === 'header'
+                        ? <h3>Ações</h3>
+                        : <NavLink key={'AtualizarBeneficiario'} to={'/beneficiary/create'}>
+                            <label
+                                onClick={() => addInLocalStorage('updBenId', props.beneficiaryId)}
+                            >
+                                Detalhes
+                            </label>
+                        </NavLink>
                 }
             </ActionDiv>
         </Container>

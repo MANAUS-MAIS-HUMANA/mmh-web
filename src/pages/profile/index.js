@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from '@rocketseat/unform'
 import Layout from '../../components/layout'
-import { Container, Header, Line, Footer } from './styles';
+import { NavLink } from 'react-router-dom';
+import { Container, ButtonContainer, Header, Line, Footer } from './styles';
 import FormInput from '../../components/Input';
 import FormSelect from '../../components/Select';
 import * as Yup from 'yup';
@@ -9,6 +10,7 @@ import FormRadio from '../../components/Radio';
 import FormCheck from '../../components/Check'
 import Loading from '../../components/Loading'
 import api from '../../services/api'
+import { addInLocalStorage } from '../../services/utils'
 import { toast } from 'react-toastify'
 import to from 'await-to-js'
 
@@ -25,7 +27,9 @@ const Profile = (props) => {
 	const [partners, setPartners] = useState([])
 	const [neighborhoods, setNeighborhoods] = useState([])
 	const [beneficiaryId] = useState(
-		props.location.extra ? props.location.extra.beneficiaryId : null
+		props.location.extra
+		? props.location.extra.beneficiaryId
+		: localStorage.getItem('@mmh/updBenId')
 	)
 	const [beneficiaryData, setBeneficiaryData] = useState(null)
 
@@ -443,6 +447,10 @@ const Profile = (props) => {
 		setPageLoading(false);
 	}
 
+	const addKeysLocalStorage = (beneficiaryId, partnerId) => {
+		addInLocalStorage('DonationBenId', beneficiaryId);
+		addInLocalStorage('partId', partnerId);
+	};
 	// Início do componente.
 
 	return (
@@ -453,6 +461,31 @@ const Profile = (props) => {
 						beneficiaryId
 							? <h2>Atualização de Beneficiário</h2>
 							: <h2>Cadastro de Beneficiários</h2>
+					}
+					{
+						beneficiaryId ?
+							<ButtonContainer>
+								<NavLink
+									key={'CriarDoacao'}
+									to={{
+										pathname: '/donation/create',
+										extra: {
+											beneficiaryId: beneficiaryId,
+											partnerId: beneficiaryData
+												? beneficiaryData.parceiro_id
+												: null,
+										},
+									}}
+								>
+									<button onClick={() => addKeysLocalStorage(
+										beneficiaryId,
+										beneficiaryData.parceiro_id
+									)}>
+										Entrega de Cestas
+									</button>
+								</NavLink>
+							</ButtonContainer>
+						: <></>
 					}
 				</Header>
 				<Form schema={schema} onSubmit={handleSubmit} >

@@ -7,6 +7,8 @@ import { NavLink } from 'react-router-dom';
 import to from 'await-to-js';
 
 import api from '../../services/api';
+import { removeFromLocalStorage } from '../../services/utils';
+
 import {
     Container,
     Header,
@@ -160,7 +162,12 @@ const Beneficiary = () => {
                             </Button>
                         </ButtonDiv>
                         <NavLink to={'/beneficiary/create'} key={'Criar'}>
-                            <Button className='button' variant='contained' color='primary'>
+                            <Button
+                                className='button'
+                                variant='contained'
+                                color='primary'
+                                onClick={() => removeFromLocalStorage('updBenId')}
+                            >
                                 Adicionar Beneficiário
                             </Button>
                         </NavLink>
@@ -172,6 +179,7 @@ const Beneficiary = () => {
                         beneficiaryData ?
                             beneficiaryData.map((beneficiary, index) =>
                                 <Row
+                                    key={beneficiary.id}
                                     rowType={(index % 2 ===  0) ? 'even' : 'odd'}
                                     beneficiaryId={beneficiary.id}
                                     name={beneficiary.nome}
@@ -199,7 +207,7 @@ const Beneficiary = () => {
                         <Form onSubmit={setNewPage}>
                             <Input
                                 name={'currentPage'}
-                                maxlength={'7'}
+                                maxLength={'7'}
                                 value={currentPage}
                                 onChange={changePage}
                             />
