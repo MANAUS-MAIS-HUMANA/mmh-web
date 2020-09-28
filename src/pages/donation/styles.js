@@ -22,7 +22,7 @@ export const Container = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 0rem 3rem;
+    padding: 5rem 3rem;
   }
 
   label {
@@ -75,19 +75,6 @@ export const Header = styled.div`
   }
 `;
 
-export const ButtonContainer = styled.div`
-  button {
-    background-color: #3857A3;
-    color: #FFFFFF;
-    height: 100%;
-    width: 100%;
-    padding: 1rem 1rem 1rem 1rem;
-    font-size: 24px;
-    font-weight: 500;
-    border-radius: 5px;
-  }
-`;
-
 export const Line = styled.div`
   width: 100%;
   display: grid;
@@ -120,42 +107,41 @@ export const Footer = styled.div`
   margin-bottom: 5rem;
   margin-top: 3rem;
 
- button {
-   display: flex;
-   flex-direction: row;
-   align-items: center;
-   justify-content: center;
-   height: 6rem;
-   width: 16.3rem;
-   border: none;
-   border-radius: 0.5rem;
-   background-color: #ffffff;
-   font-size: 2.4rem;
-   font-weight: 500;
-   transition: background 0.2s;
+  button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 6rem;
+    width: auto;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    font-size: 2.4rem;
+    font-weight: 500;
+    transition: background 0.2s;
+
+    &:last-child {
+      color: #FFFFFF;
+      background-color: #3857A3;
+    }
+
+    p {
+      margin: 1rem 2rem 1rem 2rem;
+    }
+
+    .MuiCircularProgress-svg {
+      color: #ffffff;
+    }
+
+    &:hover {
+      background-color: ${shade(0.2, '#3857A3')};
+    }
 
 
-   &:last-child {
-   color: #FFFFFF;
-   background-color: #3857A3;
-
-   p {
-     margin-right: 1rem;
-   }
-
-   .MuiCircularProgress-svg {
-     color: #ffffff;
-
-   }
-   &:hover {
-     background-color: ${shade(0.2, '#3857A3')};
-   }
-
-
-   &:disabled {
-     cursor: not-allowed;
-     background-color: ${shade(0.2, '#3857A3')};
-   }
-   }
- }
+    &:disabled {
+      cursor: not-allowed;
+      background-color: ${shade(0.2, '#3857A3')};
+    }
+  }
 `;

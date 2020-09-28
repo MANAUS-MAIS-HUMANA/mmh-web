@@ -5,6 +5,7 @@ import { isAuthenticated } from "../services/auth";
 
 import Beneficiary from "../pages/beneficiary"
 import Dashboard from "../pages/dashboard";
+import Donation from "../pages/donation";
 import Login from "../pages/login";
 import Profile from "../pages/profile";
 import Settings from "../pages/settings";
@@ -32,6 +33,7 @@ const Routes = props => {
         <PrivateRoute path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/profile" component={Beneficiary} />
         <PrivateRoute path="/beneficiary/create" component={Profile} />
+        <PrivateRoute path="/donation/create" component={Donation} />
         <PrivateRoute exact path="/settings" component={Settings} />
         <PrivateRoute exact path="/info" component={Info} />}
         <Route path="*" component={() => <h1>Page not found</h1>} />
